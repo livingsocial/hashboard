@@ -1,0 +1,19 @@
+= Hashboard: A dashboard for Hadoop
+
+Hashboard provides a simple Sinatra app dashboard view of a Hadoop cluster and the jobs running on it.
+
+== Usage
+First, get the repo:
+  git clone git@github.com:livingsocial/hashboard.git
+
+Then, in the hashboard directory, install dependencies:
+  bundle install
+
+Then, edit the config.yml file and set your namenode hostname.  Then, start the sinatra server:
+  ruby hashboard.rb
+
+You can optionall specify a port (-p), server (-s), or address (-o).  Then, just use a web browser
+to view the dashboard.
+
+== Bugs / Contact
+Bugs and patches welcome at https://github.com/livingsocial/hashboard.

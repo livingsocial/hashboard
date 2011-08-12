@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <title>HashBoard: Hadoop Dashboard</title>
+    <link href="favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="css/application.css" type="text/css" rel="stylesheet" />
+    <link href="css/sh_style.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="js/sh_main.min.js"></script>
+    <script type="text/javascript" src="js/sh_sql.min.js"></script>
+  </head>
+  <body onload="sh_highlightDocument();">
+    <header>
+      <div class="container">
+	<div class="span-10 brand">
+	  <h1><a href="/"><%= @client.name %> Dashboard</a></h1>
+	</div>
+	<nav class="span-14 last">
+	  <ul>
+            <li><a href="/">intro</a></li>
+	  </ul>
+	</nav>
+      </div>
+    </header>
+    <div class="container">
+      <section class='span-15 colborder'>
+
+  <%= @client.status.numActiveTrackers %> active trackers, <%= @client.status.numBlacklistedTrackers %> blacklisted trackers, <%= @client.status.numExcludedNodes %> excluded nodes
+
+  <div class='title'><h1>Running Jobs</h1></div>
+  <% @client.jobs(:running).each { |job| %>
+    <div class="job">
+      <h2><%= job.config['mapred.job.name'] %> (<%= job.status.jobID.asString %>)</h2>
+      Started <%= Time.at(job.startTime) %> by <%= job.config['user.name'] %>.  <%= job.percent_mapped %> % mapped.  <%= job.percent_reduced %> % reduced.<br />
+      <%= job.config['mapred.map.tasks'] %> map tasks, <%= job.config['mapred.reduce.tasks'] %> reduce tasks
+      <br />
+      <% if job.config.has_key? 'hive.query.string' %>
+        Query:
+        <pre class="sh_sql"><%= job.config['hive.query.string'] %></pre>
+      <% end %>
+    </div>    
+  <% } %>
+</section><aside class='span-8 last'>
+  <section class='mod'>
+    <header>
+      <h2><%= @client.trackers.length %> Trackers</h2>
+    </header>
+    <article>
+      <ul>
+        <% @client.trackers.each { |t| %>
+        <li><%= t.host %>: <%= "#{t.failureCount} failures, #{t.tasks.length} active tasks" %><br /><i>(last seen <%= Time.at(t.lastSeen / 1000) %>)</i></li>
+        <% } %>
+      </ul>
+    </article>
+  </section>
+</aside>
+    </div>
+    <footer>
+    </footer>
+  </body>
+</html>
