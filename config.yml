@@ -1,2 +1,2 @@
-mapred_host: localhost
+mapred_host: hadoop
 mapred_port: 9290

@@ -30,7 +30,7 @@
   <% @client.jobs(:running).each { |job| %>
     <div class="job">
       <h2><%= job.config['mapred.job.name'] %> (<%= job.status.jobID.asString %>)</h2>
-      Started <%= Time.at(job.startTime) %> by <%= job.config['user.name'] %>.  <%= job.percent_mapped %> % mapped.  <%= job.percent_reduced %> % reduced.<br />
+      Started <%= Time.at(job.startTime / 1000) %> (<%= (Time.now.to_i - (job.startTime / 1000)).to_f / 3600.0 %> hours ago) by <%= job.config['user.name'] %>.  <%= job.percent_mapped %> % mapped.  <%= job.percent_reduced %> % reduced.<br />
       <%= job.config['mapred.map.tasks'] %> map tasks, <%= job.config['mapred.reduce.tasks'] %> reduce tasks
       <br />
       <% if job.config.has_key? 'hive.query.string' %>
